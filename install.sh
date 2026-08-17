@@ -43,6 +43,8 @@ SERVICE_NAME="${SERVICE_NAME:-sccs}"
 LAN_ADDR="${LAN_ADDR:-10.10.10.1}"
 # Control-Pi UI URL used as Chromium homepage / autostart on touchscreens (nginx :80).
 SCCS_UI_URL="${SCCS_UI_URL:-http://${LAN_ADDR}/}"
+# Board default is Hardware CDC/JTAG (usb_mode=1). USBMode=default is TinyUSB
+# OTG and can hang setup() on these modules, which have no USB.
 ESP_FQBN="${ESP_FQBN:-esp32:esp32:esp32s3}"
 W1_GPIO="${W1_GPIO:-3}"
 
@@ -319,6 +321,55 @@ is_raspberry_pi5() {
         model="$(tr -d '\0' </proc/device-tree/model 2>/dev/null || true)"
     fi
     [[ "${model,,}" == *"raspberry pi 5"* ]]
+}
+
+# Start sccs.service if the unit exists and it is not already active.
+ensure_sccs_service_running() {
+    if ! systemctl cat "${SERVICE_NAME}.service" &>/dev/null; then
+        return 0
+    fi
+    if systemctl is-active --quiet "${SERVICE_NAME}.service" 2>/dev/null; then
+        return 0
+    fi
+    info "Starting ${SERVICE_NAME}.service…"
+    if systemctl start "${SERVICE_NAME}.service"; then
+        ok "Service started"
+    else
+        warn "Could not start ${SERVICE_NAME}.service — nginx will 502 until it is running"
+    fi
+}
+
+# Insert dtoverlay=<name> immediately under [section] if it is not already
+# present as a line-start assignment anywhere in config.txt.
+# Returns 0 if the file was changed.
+ensure_dtoverlay_in_section() {
+    local section="$1" ov="$2" line="dtoverlay=${ov}"
+    [[ -n "${CONFIG_TXT:-}" && -f "$CONFIG_TXT" ]] || return 1
+    if grep -qE "^dtoverlay=${ov}([[:space:]]|,|$)" "$CONFIG_TXT"; then
+        info "Already present: ${line}"
+        return 1
+    fi
+    if grep -qE "^\[${section}\]" "$CONFIG_TXT"; then
+        awk -v sec="[${section}]" -v line="$line" '
+            BEGIN { done = 0 }
+            $0 == sec {
+                print
+                if (!done) { print line; done = 1 }
+                next
+            }
+            { print }
+            END {
+                if (!done) {
+                    print sec
+                    print line
+                }
+            }
+        ' "$CONFIG_TXT" >"${CONFIG_TXT}.sccs.tmp" && mv "${CONFIG_TXT}.sccs.tmp" "$CONFIG_TXT"
+    else
+        printf '\n[%s]\n%s\n' "$section" "$line" >>"$CONFIG_TXT"
+    fi
+    ok "Enabled ${line} under [${section}]"
+    return 0
 }
 
 # Ensure key=value exists under [section] in $CONFIG_TXT. Returns 0 if changed.
@@ -803,23 +854,23 @@ step_boot_firmware() {
         cp -a "$CONFIG_TXT" "${CONFIG_TXT}.bak.sccs.$(date +%Y%m%d%H%M%S)"
         local changed_cfg=0 ov w1_line
 
-        if ! grep -qE '^\[pi4\]' "$CONFIG_TXT"; then
-            printf '\n[pi4]\n' >>"$CONFIG_TXT"
-            changed_cfg=1
+        # Same GPIOs on both boards; overlay *names* differ:
+        #   Pi 4 (BCM2711): uart2=GPIO0/1  uart3=GPIO4/5  uart4=GPIO8/9
+        #   Pi 5 (RP1):     uart1-pi5=GPIO0/1  uart2-pi5=GPIO4/5  uart3-pi5=GPIO8/9
+        # Device nodes stay /dev/ttyAMA1 (GPS), ttyAMA2 (ESP1), ttyAMA3 (ESP2).
+        # Do not enable ctsrts — GPIO3 is 1-Wire and GPIO7 is a reed input.
+        local uart_section uart_overlays
+        if is_raspberry_pi5; then
+            uart_section=pi5
+            uart_overlays=(uart1-pi5 uart2-pi5 uart3-pi5)
+        else
+            uart_section=pi4
+            uart_overlays=(uart2 uart3 uart4)
         fi
-        for ov in uart2 uart3 uart4; do
-            if ! grep -qE "^dtoverlay=${ov}\b" "$CONFIG_TXT"; then
-                awk -v ov="dtoverlay=${ov}" '
-                    BEGIN { done=0 }
-                    /^\[pi4\]/ { print; if (!done) { print ov; done=1 } next }
-                    { print }
-                    END { if (!done) { print "[pi4]"; print ov } }
-                ' "$CONFIG_TXT" >"${CONFIG_TXT}.sccs.tmp" && mv "${CONFIG_TXT}.sccs.tmp" "$CONFIG_TXT"
-                ok "Enabled dtoverlay=${ov}"
+        for ov in "${uart_overlays[@]}"; do
+            if ensure_dtoverlay_in_section "$uart_section" "$ov"; then
                 changed_cfg=1
                 NEED_REBOOT=1
-            else
-                info "Already present: dtoverlay=${ov}"
             fi
         done
 
@@ -887,11 +938,18 @@ ensure_arduino_cli() {
 }
 
 # Returns: 0 = port found (ESP_PORT set), 1 = timeout/fail, 2 = user skip
+# $1 = label, $2 = preferred host UART (e.g. /dev/ttyAMA2). The SCCS Core
+# wires each ESP's UART0 to that Pi UART — same pins as the ROM bootloader.
 wait_for_esp_port() {
-    local label="$1" tries=0 max_tries=90 ans
+    local label="$1" preferred="${2:-}" tries=0 max_tries=90 ans
     info "Waiting for serial port (download mode)…" >&2
     info "Type ${C_BOLD}s${C_RESET}${C_DIM} + Enter anytime to skip (no hardware / wrong step).${C_RESET}" >&2
     while (( tries < max_tries )); do
+        if [[ -n "$preferred" && -e "$preferred" ]]; then
+            ESP_PORT="$preferred"
+            ok "Found ${ESP_PORT} for ${label}" >&2
+            return 0
+        fi
         mapfile -t ports < <(ls /dev/ttyACM* /dev/ttyUSB* 2>/dev/null | sort || true)
         if [[ ${#ports[@]} -ge 1 ]]; then
             ESP_PORT="${ports[0]}"
@@ -917,18 +975,65 @@ wait_for_esp_port() {
     return 1
 }
 
+# True when the flashed app answers GETVCC on the host UART (not just the ROM).
+verify_esp_protocol() {
+    local port="$1"
+    python3 - "$port" <<'PY'
+import os, sys, termios, time, select
+
+port = sys.argv[1]
+try:
+    fd = os.open(port, os.O_RDWR | os.O_NOCTTY | os.O_NONBLOCK)
+except OSError:
+    sys.exit(1)
+try:
+    attrs = termios.tcgetattr(fd)
+    iflag, oflag, cflag, lflag, ispeed, ospeed, cc = attrs
+    cflag &= ~(termios.CSIZE | termios.PARENB | termios.CSTOPB | termios.CRTSCTS)
+    cflag |= termios.CS8 | termios.CREAD | termios.CLOCAL
+    lflag &= ~(termios.ICANON | termios.ECHO | termios.ECHOE | termios.ISIG)
+    iflag &= ~(termios.IXON | termios.IXOFF | termios.IXANY | termios.INLCR | termios.ICRNL)
+    oflag &= ~termios.OPOST
+    cc[termios.VMIN] = 0
+    cc[termios.VTIME] = 0
+    attrs = [iflag, oflag, cflag, lflag, termios.B115200, termios.B115200, cc]
+    termios.tcsetattr(fd, termios.TCSANOW, attrs)
+    termios.tcflush(fd, termios.TCIOFLUSH)
+    # App firmware needs a moment after RESET (ROM banner + Arduino setup).
+    time.sleep(1.5)
+    os.write(fd, b"GETVCC\n")
+    deadline = time.time() + 2.0
+    buf = b""
+    while time.time() < deadline:
+        ready, _, _ = select.select([fd], [], [], 0.2)
+        if ready:
+            try:
+                chunk = os.read(fd, 256)
+            except BlockingIOError:
+                chunk = b""
+            if chunk:
+                buf += chunk
+                # Require a real reply. "GETVCC" itself contains the letters VCC.
+                if b"VCC " in buf or b"VCC\n" in buf or b"VCC\r" in buf:
+                    sys.exit(0)
+    sys.exit(1)
+finally:
+    os.close(fd)
+PY
+}
+
 flash_one_esp() {
-    local sketch_rel="$1" label="$2"
+    local sketch_rel="$1" label="$2" host_port="${3:-}"
     local sketch_dir="$SCCS_HOME/$sketch_rel" ans wait_rc
     [[ -d "$sketch_dir" ]] || { warn "Missing $sketch_dir"; return 1; }
 
     while true; do
         echo
-        echo "  ${C_BOLD}${label}${C_RESET} — ${C_CYAN}serial download mode${C_RESET}:"
+        echo "  ${C_BOLD}${label}${C_RESET} — ${C_CYAN}UART0 download mode${C_RESET}${host_port:+ on ${host_port}}:"
         echo "    1. Hold ${C_BOLD}BOOT${C_RESET}"
         echo "    2. Press and release ${C_BOLD}RESET${C_RESET}"
         echo "    3. Release ${C_BOLD}BOOT${C_RESET}"
-        echo "    ${C_DIM}(Pi connected to the SCCS Core; firmware is loaded over serial)${C_RESET}"
+        echo "    ${C_DIM}(Pi on the SCCS Core; ROM bootloader is on the same UART as the host protocol)${C_RESET}"
         echo
         echo "  ${C_YELLOW}!${C_RESET} Pi not on the SCCS Core? Type ${C_BOLD}s${C_RESET} to skip this module."
         echo "  ${C_DIM}You can also type s during the serial wait if you started this by mistake.${C_RESET}"
@@ -947,7 +1052,7 @@ flash_one_esp() {
 
         ESP_PORT=""
         wait_rc=0
-        wait_for_esp_port "$label" || wait_rc=$?
+        wait_for_esp_port "$label" "$host_port" || wait_rc=$?
         if [[ "$wait_rc" -eq 2 ]]; then
             skip_note "${label} flash skipped during download wait"
             return 0
@@ -960,9 +1065,37 @@ flash_one_esp() {
         fi
 
         info "Uploading $sketch_rel → $ESP_PORT…"
-        if arduino-cli upload -p "$ESP_PORT" --fqbn "$ESP_FQBN" "$sketch_dir"; then
+        # Same user as compile — root's ~/.arduino15 does not have the ESP32 core.
+        if run_as_user env PATH="$PATH" arduino-cli upload -p "$ESP_PORT" --fqbn "$ESP_FQBN" "$sketch_dir"; then
             ok "${label} firmware uploaded"
-            sleep 2
+            echo
+            echo "  Tap ${C_BOLD}RESET${C_RESET} on ${label} ${C_DIM}(do not hold BOOT)${C_RESET} to run the new firmware."
+            echo "  ${C_DIM}The Pi UART has no RTS reset line, so esptool cannot start the app for you.${C_RESET}"
+            echo
+            read -r -p "  Enter after RESET (s = skip protocol check)… " ans || true
+            case "${ans,,}" in
+                s|skip) ;;
+                *)
+                    local verify_try
+                    for verify_try in 1 2 3; do
+                        if verify_esp_protocol "$ESP_PORT"; then
+                            ok "${label} answered GETVCC — lighting MCU is live"
+                            break
+                        fi
+                        if (( verify_try == 3 )); then
+                            warn "${label} did not answer GETVCC — upload is done; continuing to the next module."
+                            info "You can tap RESET again after the installer finishes, then restart ${SERVICE_NAME}.service."
+                            break
+                        fi
+                        echo
+                        echo "  No GETVCC yet. Tap ${C_BOLD}RESET${C_RESET} again ${C_DIM}(BOOT released)${C_RESET}, then Enter."
+                        read -r -p "  Enter to re-check (s = continue anyway)… " ans || true
+                        case "${ans,,}" in
+                            s|skip) break ;;
+                        esac
+                    done
+                    ;;
+            esac
             return 0
         fi
         warn "Upload failed for ${label}"
@@ -976,6 +1109,12 @@ step_esp() {
     local mode="${1:-optional}" flash_rc=0
     step_begin "ESP32 firmware"
     require_checkout
+
+    # However this step ends (skip, abort, compile fail, Ctrl-C), sccs must be up.
+    trap 'trap - INT TERM ERR RETURN; ensure_sccs_service_running' RETURN
+    trap 'ensure_sccs_service_running; exit 130' INT
+    trap 'ensure_sccs_service_running; exit 143' TERM
+    trap 'ensure_sccs_service_running' ERR
 
     echo
     info "Firmware is loaded over ${C_BOLD}serial${C_RESET} when the Pi is fitted to the SCCS Core"
@@ -1008,18 +1147,13 @@ step_esp() {
     run_as_user env PATH="$PATH" arduino-cli compile --fqbn "$ESP_FQBN" "$SCCS_HOME/esp32/esp32_2"
     ok "Compiled esp32_2"
 
-    flash_one_esp "esp32/esp32_1" "ESP32-1 (lighting / water)" || flash_rc=$?
+    flash_one_esp "esp32/esp32_1" "ESP32-1 (lighting / water)" /dev/ttyAMA2 || flash_rc=$?
     if [[ "$flash_rc" -eq 2 ]]; then
         warn "Stopped before ESP32-2"
     else
-        flash_one_esp "esp32/esp32_2" "ESP32-2 (lighting)" || true
+        flash_one_esp "esp32/esp32_2" "ESP32-2 (lighting)" /dev/ttyAMA3 || true
     fi
     ok "ESP32 flash step finished"
-
-    if systemctl list-unit-files "${SERVICE_NAME}.service" &>/dev/null; then
-        ask_yn "Start ${SERVICE_NAME}.service again?" y
-        [[ "$REPLY" == "y" ]] && systemctl start "${SERVICE_NAME}.service" && ok "Service started"
-    fi
 }
 
 # mode: optional | required

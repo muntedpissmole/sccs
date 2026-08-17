@@ -1,7 +1,7 @@
 /*
  * SCCS — ESP32-2 (ESP32-S3-WROOM-1U)
  *
- * Pi link: Pi UART4 GPIO 8 (TX) / 9 (RX) ↔ this ESP UART1 GPIO 17 (RX) / 18 (TX).
+ * Pi link: Pi GPIO 8 (TX) / 9 (RX) ↔ this ESP UART0 GPIO 44 (RX) / 43 (TX).
  *
  * PWM (module GPIO): 4–11  (silk 2-4 … 2-11)
  *   2-4 accent, 2-5 rooftop tent
@@ -18,9 +18,9 @@
 #define SCCS_PWM_PINS {4, 5, 6, 7, 8, 9, 10, 11}
 #define SCCS_ANALOG_PINS {1, 2}
 
-// Host UART1 to the Pi (both ESPs use the same pins).
-#define SCCS_HOST_RX 17
-#define SCCS_HOST_TX 18
+// Host UART0 to the Pi (same pins as the ROM bootloader).
+#define SCCS_HOST_RX 44
+#define SCCS_HOST_TX 43
 
 #include "SccsEspFirmware.h"
 

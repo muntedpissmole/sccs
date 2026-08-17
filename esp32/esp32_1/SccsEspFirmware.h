@@ -1,7 +1,8 @@
 /*
  * SCCS ESP32-S3 lighting / analog MCU firmware (shared core).
  *
- * Host link: UART1 on GPIO 17 (RX) / 18 (TX) to the Raspberry Pi, 115200 8N1.
+ * Host link: UART0 on GPIO 44 (RX / U0RXD) / 43 (TX / U0TXD) to the Raspberry Pi, 115200 8N1.
+ * Those are the same pins the ROM bootloader uses, so BOOT+RESET flashes over the Pi UART.
  *
  * Protocol:
  *   SET <gpio> <pwm0-255>
@@ -15,7 +16,7 @@
  *   SCCS_ESP_ID            1 or 2
  *   SCCS_PWM_PINS          {4,5,6,7,8,9,10,11}
  *   SCCS_ANALOG_PINS       {1} or {1,2}
- * Optional: SCCS_HOST_RX / SCCS_HOST_TX (defaults 17 / 18)
+ * Optional: SCCS_HOST_RX / SCCS_HOST_TX (defaults 44 / 43, UART0)
  */
 
 #pragma once
@@ -36,12 +37,13 @@
 #define SCCS_BAUD 115200
 #endif
 
-// Pi ↔ ESP UART1 (both ESP32-1 and ESP32-2 on the SCCS PCB).
+// Pi ↔ ESP UART0 (both ESP32-1 and ESP32-2 on the SCCS PCB).
+// Matches U0RXD/U0TXD on the WROOM-1U — same UART the ROM bootloader uses.
 #ifndef SCCS_HOST_RX
-#define SCCS_HOST_RX 17
+#define SCCS_HOST_RX 44
 #endif
 #ifndef SCCS_HOST_TX
-#define SCCS_HOST_TX 18
+#define SCCS_HOST_TX 43
 #endif
 
 #ifndef SCCS_PWM_FREQ_HZ
@@ -83,7 +85,12 @@ static PwmState g_pwm[kMaxGpio];
 static bool g_is_pwm[kMaxGpio];
 static bool g_is_analog[kMaxGpio];
 
-static HardwareSerial HostSerial(1);
+// UART0 is already Serial0 in the Arduino-ESP32 core. A second
+// HardwareSerial(0) does not share that driver and stays silent on the Pi.
+#define HostSerial Serial0
+
+static char g_line[96];
+static size_t g_line_len = 0;
 
 static bool isPwmGpio(int gpio) {
   return gpio >= 0 && gpio < kMaxGpio && g_is_pwm[gpio];
@@ -212,7 +219,42 @@ static void handleLine(String command) {
   }
 }
 
+static void serviceHostSerial() {
+  while (HostSerial.available() > 0) {
+    const int raw = HostSerial.read();
+    if (raw < 0) {
+      break;
+    }
+    const char c = static_cast<char>(raw);
+    if (c == '\r') {
+      continue;
+    }
+    if (c == '\n') {
+      g_line[g_line_len] = '\0';
+      handleLine(String(g_line));
+      g_line_len = 0;
+      continue;
+    }
+    if (g_line_len + 1 < sizeof(g_line)) {
+      g_line[g_line_len++] = c;
+    } else {
+      g_line_len = 0;
+    }
+  }
+}
+
 static void sccsSetup() {
+  // Bring up the host UART before PWM/ADC so a later init hang is still visible.
+  HostSerial.setTxBufferSize(256);
+  HostSerial.setRxBufferSize(256);
+  HostSerial.begin(SCCS_BAUD, SERIAL_8N1, SCCS_HOST_RX, SCCS_HOST_TX);
+  HostSerial.setDebugOutput(false);
+  HostSerial.setTimeout(20);
+  delay(50);
+  HostSerial.print("SCCS ");
+  HostSerial.print(SCCS_ESP_ID);
+  HostSerial.println(" READY");
+
   memset(g_pwm, 0, sizeof(g_pwm));
   memset(g_is_pwm, 0, sizeof(g_is_pwm));
   memset(g_is_analog, 0, sizeof(g_is_analog));
@@ -243,15 +285,9 @@ static void sccsSetup() {
     pinMode(gpio, INPUT);
     analogSetPinAttenuation(gpio, ADC_11db);
   }
-
-  HostSerial.begin(SCCS_BAUD, SERIAL_8N1, SCCS_HOST_RX, SCCS_HOST_TX);
 }
 
 static void sccsLoop() {
   servicePwmRamps();
-
-  while (HostSerial.available() > 0) {
-    String command = HostSerial.readStringUntil('\n');
-    handleLine(command);
-  }
+  serviceHostSerial();
 }

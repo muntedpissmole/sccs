@@ -190,7 +190,13 @@ class Esp32Manager:
             return False
 
         for idx in list(self.serials.keys()):
-            self._probe_esp(idx)
+            if self._probe_esp(idx):
+                continue
+            # App firmware may still be coming out of reset after a flash.
+            for _ in range(2):
+                time.sleep(0.25)
+                if self._probe_esp(idx):
+                    break
 
         if not self.is_connected():
             logger.warning(
