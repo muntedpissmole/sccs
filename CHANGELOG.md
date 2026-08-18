@@ -2,6 +2,11 @@
 
 All notable changes to SCCS are documented in this file.
 
+## [1.1.2.18082026] - 2026-08-18
+
+### Added
+- Installer 1-Wire setup can delete a temperature sensor role from `sccs.conf`; skip still leaves the existing value
+
 ## [1.1.1.18082026] - 2026-08-18
 
 ### Fixed

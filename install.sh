@@ -775,26 +775,31 @@ step_sensors() {
     local do_assign=0
     if [[ ${#W1_IDS[@]} -eq 0 ]]; then
         warn "No DS18B20 devices under /sys/bus/w1/devices/"
-        if [[ "$mode" == "optional" ]]; then
-            skip_note "1-Wire skipped — no sensors detected (configure later from the menu)"
-        else
-            warn "Wire sensors / reboot after overlays, then try again"
+        if [[ -z "$cur_out$cur_fridge$cur_freezer" ]]; then
+            if [[ "$mode" == "optional" ]]; then
+                skip_note "1-Wire skipped — no sensors detected (configure later from the menu)"
+            else
+                warn "Wire sensors / reboot after overlays, then try again"
+            fi
+            return 0
         fi
-        return 0
+        info "Configured roles can still be deleted from sccs.conf"
     fi
 
-    echo
-    info "Detected ${#W1_IDS[@]} sensor(s):"
-    local i id temp
-    for i in "${!W1_IDS[@]}"; do
-        id="${W1_IDS[$i]}"
-        temp="$(read_w1_temp "$id")"
-        printf "  ${C_BOLD}[%d]${C_RESET}  %s   ${C_CYAN}%s${C_RESET}\n" "$((i + 1))" "$id" "$temp"
-    done
-    echo
+    if [[ ${#W1_IDS[@]} -gt 0 ]]; then
+        echo
+        info "Detected ${#W1_IDS[@]} sensor(s):"
+        local i id temp
+        for i in "${!W1_IDS[@]}"; do
+            id="${W1_IDS[$i]}"
+            temp="$(read_w1_temp "$id")"
+            printf "  ${C_BOLD}[%d]${C_RESET}  %s   ${C_CYAN}%s${C_RESET}\n" "$((i + 1))" "$id" "$temp"
+        done
+        echo
+    fi
 
     if [[ "$mode" == "optional" ]]; then
-        ask_yn "Assign sensors to ambient / fridge / freezer now?" y
+        ask_yn "Configure temperature sensors now?" y
         [[ "$REPLY" == "y" ]] && do_assign=1
     else
         do_assign=1
@@ -806,34 +811,122 @@ step_sensors() {
     fi
 
     info "ambient → outside_temp_sensor · fridge → fridge_temp_sensor · freezer → freezer_temp_sensor"
-    info "Only roles you assign are written; others keep existing values."
+    info "Assign writes that role. Skip leaves it. Delete clears this sensor from config."
 
     declare -A ROLE_FOR=()
+    declare -A CLEAR_KEY=()
     local used_ambient=0 used_fridge=0 used_freezer=0 choice
 
+    role_of_id() {
+        local sid="$1"
+        if [[ -n "$cur_out" && "$cur_out" == "$sid" ]]; then
+            echo ambient
+        elif [[ -n "$cur_fridge" && "$cur_fridge" == "$sid" ]]; then
+            echo fridge
+        elif [[ -n "$cur_freezer" && "$cur_freezer" == "$sid" ]]; then
+            echo freezer
+        fi
+    }
+
+    key_for_role() {
+        case "$1" in
+            ambient) echo outside_temp_sensor ;;
+            fridge) echo fridge_temp_sensor ;;
+            freezer) echo freezer_temp_sensor ;;
+        esac
+    }
+
+    note_delete() {
+        local role="$1"
+        local key
+        key="$(key_for_role "$role")"
+        CLEAR_KEY["$key"]=1
+        case "$role" in
+            ambient) used_ambient=0; cur_out="" ;;
+            fridge) used_fridge=0; cur_fridge="" ;;
+            freezer) used_freezer=0; cur_freezer="" ;;
+        esac
+        unset 'ROLE_FOR[$role]'
+    }
+
+    local already
     for id in "${W1_IDS[@]}"; do
         temp="$(read_w1_temp "$id")"
+        already="$(role_of_id "$id")"
         while true; do
             echo
-            echo "  Sensor ${C_BOLD}${id}${C_RESET} (${temp})"
-            read -r -p "    [a] ambient  [f] fridge  [z] freezer  [s] skip  — " choice || true
+            if [[ -n "$already" ]]; then
+                echo "  Sensor ${C_BOLD}${id}${C_RESET} (${temp})  ${C_DIM}currently ${already}${C_RESET}"
+            else
+                echo "  Sensor ${C_BOLD}${id}${C_RESET} (${temp})"
+            fi
+            read -r -p "    [a] ambient  [f] fridge  [z] freezer  [s] skip  [d] delete  — " choice || true
             case "${choice,,}" in
                 a|ambient)
                     [[ "$used_ambient" -eq 1 ]] && { warn "ambient already assigned"; continue; }
-                    ROLE_FOR[ambient]="$id"; used_ambient=1; ok "ambient ← $id"; break ;;
+                    ROLE_FOR[ambient]="$id"; used_ambient=1
+                    unset 'CLEAR_KEY[outside_temp_sensor]'
+                    ok "ambient ← $id"; break ;;
                 f|fridge)
                     [[ "$used_fridge" -eq 1 ]] && { warn "fridge already assigned"; continue; }
-                    ROLE_FOR[fridge]="$id"; used_fridge=1; ok "fridge ← $id"; break ;;
+                    ROLE_FOR[fridge]="$id"; used_fridge=1
+                    unset 'CLEAR_KEY[fridge_temp_sensor]'
+                    ok "fridge ← $id"; break ;;
                 z|freezer)
                     [[ "$used_freezer" -eq 1 ]] && { warn "freezer already assigned"; continue; }
-                    ROLE_FOR[freezer]="$id"; used_freezer=1; ok "freezer ← $id"; break ;;
+                    ROLE_FOR[freezer]="$id"; used_freezer=1
+                    unset 'CLEAR_KEY[freezer_temp_sensor]'
+                    ok "freezer ← $id"; break ;;
                 s|skip|"") info "skipped $id"; break ;;
-                *) echo "    Enter a, f, z, or s." ;;
+                d|del|delete)
+                    if [[ -z "$already" ]]; then
+                        info "$id is not in config — skip to leave it unassigned"
+                        continue
+                    fi
+                    note_delete "$already"
+                    ok "deleted $already ($id) from config"
+                    break ;;
+                *) echo "    Enter a, f, z, s, or d." ;;
+            esac
+        done
+    done
+
+    # Configured IDs that are not on the bus can still be removed.
+    local role cur
+    for role in ambient fridge freezer; do
+        case "$role" in
+            ambient) cur="$cur_out" ;;
+            fridge) cur="$cur_fridge" ;;
+            freezer) cur="$cur_freezer" ;;
+        esac
+        [[ -n "$cur" ]] || continue
+        local on_bus=0
+        for id in "${W1_IDS[@]}"; do
+            [[ "$id" == "$cur" ]] && { on_bus=1; break; }
+        done
+        [[ "$on_bus" -eq 0 ]] || continue
+        while true; do
+            echo
+            echo "  ${C_BOLD}${role}${C_RESET} is ${cur}  ${C_DIM}not on the bus${C_RESET}"
+            read -r -p "    [d] delete  [s] skip  — " choice || true
+            case "${choice,,}" in
+                d|del|delete)
+                    note_delete "$role"
+                    ok "deleted $role ($cur) from config"
+                    break ;;
+                s|skip|"") info "skipped $role"; break ;;
+                *) echo "    Enter d or s." ;;
             esac
         done
     done
 
     local set_args=()
+    local key
+    if [[ ${#CLEAR_KEY[@]} -gt 0 ]]; then
+        for key in "${!CLEAR_KEY[@]}"; do
+            set_args+=("$key" "")
+        done
+    fi
     [[ -n "${ROLE_FOR[ambient]:-}" ]] && set_args+=(outside_temp_sensor "${ROLE_FOR[ambient]}")
     [[ -n "${ROLE_FOR[fridge]:-}" ]] && set_args+=(fridge_temp_sensor "${ROLE_FOR[fridge]}")
     [[ -n "${ROLE_FOR[freezer]:-}" ]] && set_args+=(freezer_temp_sensor "${ROLE_FOR[freezer]}")
