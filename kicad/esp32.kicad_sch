@@ -1718,6 +1718,12 @@
 		(color 0 0 0 0)
 		(uuid "e950fc50-8fb1-410e-91a5-dbf95743a1a9")
 	)
+	(junction
+		(at 69.85 64.77)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f24c430b-0097-4e76-bac8-3d70754d7ac5")
+	)
 	(no_connect
 		(at 167.64 130.81)
 		(uuid "076c2a70-0527-447c-b8e9-a7443a9eff6f")
@@ -1852,6 +1858,16 @@
 	)
 	(wire
 		(pts
+			(xy 69.85 64.77) (xy 76.2 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1c26ac8a-8180-49a0-ab7e-db016d047632")
+	)
+	(wire
+		(pts
 			(xy 127 48.26) (xy 127 45.72)
 		)
 		(stroke
@@ -1962,7 +1978,17 @@
 	)
 	(wire
 		(pts
-			(xy 66.04 64.77) (xy 66.04 67.31)
+			(xy 82.55 54.61) (xy 80.01 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "73a92529-202f-480f-af30-9ea8321b0438")
+	)
+	(wire
+		(pts
+			(xy 59.69 64.77) (xy 59.69 67.31)
 		)
 		(stroke
 			(width 0)
@@ -1989,6 +2015,16 @@
 			(type default)
 		)
 		(uuid "7f22d41b-e68d-4aa6-a575-cbf16bb3b636")
+	)
+	(wire
+		(pts
+			(xy 69.85 54.61) (xy 69.85 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8197594f-0dd6-41cf-80e8-75864a261065")
 	)
 	(wire
 		(pts
@@ -2019,6 +2055,16 @@
 			(type default)
 		)
 		(uuid "8dbcf5f8-b19c-4b0d-825b-797761dcf6ca")
+	)
+	(wire
+		(pts
+			(xy 72.39 54.61) (xy 69.85 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "94efc975-331d-4b45-8ea2-0e25868ed8fb")
 	)
 	(wire
 		(pts
@@ -2079,6 +2125,16 @@
 			(type default)
 		)
 		(uuid "e492d90f-6819-4bf8-b06f-d84bc49d6187")
+	)
+	(wire
+		(pts
+			(xy 82.55 52.07) (xy 82.55 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ec5c7190-d9d1-4985-98d2-e66234075412")
 	)
 	(wire
 		(pts
@@ -2253,7 +2309,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "0c5e71dd-e378-47af-b364-0f40fc9507fe")
-		(property "Reference" "C55"
+		(property "Reference" "C49"
 			(at 188.976 89.154 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2328,11 +2384,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "C55")
+					(reference "C49")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "C59")
+					(reference "C53")
 					(unit 1)
 				)
 			)
@@ -2340,7 +2396,7 @@
 	)
 	(symbol
 		(lib_id "Switch:SW_Push")
-		(at 71.12 64.77 0)
+		(at 64.77 64.77 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2351,7 +2407,7 @@
 		(fields_autoplaced yes)
 		(uuid "33ad5538-6ebb-446f-ad5d-7d1bd7c2ae99")
 		(property "Reference" "SW1"
-			(at 71.12 57.15 0)
+			(at 64.77 57.15 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2361,7 +2417,7 @@
 			)
 		)
 		(property "Value" "RESET"
-			(at 71.12 59.69 0)
+			(at 64.77 59.69 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2371,7 +2427,7 @@
 			)
 		)
 		(property "Footprint" "Button_Switch_THT:SW_PUSH_1P1T_6x3.5mm_H5.0_APEM_MJTP1250"
-			(at 71.12 59.69 0)
+			(at 64.77 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2382,7 +2438,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 59.69 0)
+			(at 64.77 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2393,7 +2449,7 @@
 			)
 		)
 		(property "Description" "Push button switch, generic, two pins"
-			(at 71.12 64.77 0)
+			(at 64.77 64.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2404,7 +2460,7 @@
 			)
 		)
 		(property "LCSC Part #" "C500070"
-			(at 71.12 64.77 0)
+			(at 64.77 64.77 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2445,7 +2501,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "3c76ae6f-921d-4185-9cc1-5e89bbc0b7c9")
-		(property "Reference" "#PWR082"
+		(property "Reference" "#PWR055"
 			(at 242.57 88.9 0)
 			(hide yes)
 			(show_name no)
@@ -2505,11 +2561,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR082")
+					(reference "#PWR055")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR090")
+					(reference "#PWR064")
 					(unit 1)
 				)
 			)
@@ -2612,6 +2668,99 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:R")
+		(at 76.2 54.61 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4665d4c8-23db-4d28-91c4-c46d4b9af0a0")
+		(property "Reference" "R36"
+			(at 76.2 56.642 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "10K"
+			(at 76.2 54.61 90)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
+			(at 76.2 56.388 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" "https://fscdn.rohm.com/en/products/databook/datasheet/passive/resistor/chip_resistor/mcr-e.pdf"
+			(at 76.2 54.61 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 76.2 54.61 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C60490"
+			(at 76.2 54.61 90)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "436fdf85-3cd1-499c-996b-8e5799762f8b")
+		)
+		(pin "2"
+			(uuid "d160f155-6ee8-4a97-9b50-fa00d5b977b0")
+		)
+		(instances
+			(project "SCCS-RPI"
+				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
+					(reference "R36")
+					(unit 1)
+				)
+				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
+					(reference "R38")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 119.38 45.72 270)
 		(mirror x)
@@ -2623,7 +2772,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "53c65798-b757-4741-9a91-b852fd49be41")
-		(property "Reference" "C52"
+		(property "Reference" "C46"
 			(at 120.904 45.72 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2698,11 +2847,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "C52")
+					(reference "C46")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "C56")
+					(reference "C50")
 					(unit 1)
 				)
 			)
@@ -2934,7 +3083,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "739523ae-8583-46fd-aaaf-7a9d648fe3ec")
-		(property "Reference" "#PWR081"
+		(property "Reference" "#PWR054"
 			(at 185.42 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -2994,11 +3143,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR081")
+					(reference "#PWR054")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR089")
+					(reference "#PWR063")
 					(unit 1)
 				)
 			)
@@ -3015,7 +3164,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "76eb6852-978f-4f79-a500-5f9d66dd4544")
-		(property "Reference" "#PWR084"
+		(property "Reference" "#PWR057"
 			(at 121.92 151.13 0)
 			(hide yes)
 			(show_name no)
@@ -3075,11 +3224,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR084")
+					(reference "#PWR057")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR092")
+					(reference "#PWR066")
 					(unit 1)
 				)
 			)
@@ -3096,7 +3245,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "8afdaf14-50ff-47c1-a51d-71eeae4b9a7f")
-		(property "Reference" "#PWR079"
+		(property "Reference" "#PWR051"
 			(at 127 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -3156,11 +3305,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR079")
+					(reference "#PWR051")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR087")
+					(reference "#PWR060")
 					(unit 1)
 				)
 			)
@@ -3177,7 +3326,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "9cce37d5-f712-4c01-b8e8-95c006e9d2ab")
-		(property "Reference" "R77"
+		(property "Reference" "R37"
 			(at 173.99 76.962 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3249,11 +3398,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "R77")
+					(reference "R37")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "R78")
+					(reference "R39")
 					(unit 1)
 				)
 			)
@@ -3271,7 +3420,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "9e2f1afb-37e6-45eb-aab7-e63ae3b35de6")
-		(property "Reference" "C54"
+		(property "Reference" "C48"
 			(at 197.104 86.614 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3346,11 +3495,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "C54")
+					(reference "C48")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "C58")
+					(reference "C52")
 					(unit 1)
 				)
 			)
@@ -3367,7 +3516,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a175836a-e861-4105-ab75-8cfa92098097")
-		(property "Reference" "#PWR077"
+		(property "Reference" "#PWR049"
 			(at 121.92 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -3427,11 +3576,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR077")
+					(reference "#PWR049")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR085")
+					(reference "#PWR058")
 					(unit 1)
 				)
 			)
@@ -3448,7 +3597,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a9dab40f-b67e-4df9-b048-b2ae469ada66")
-		(property "Reference" "#PWR078"
+		(property "Reference" "#PWR050"
 			(at 116.84 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -3508,11 +3657,93 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR078")
+					(reference "#PWR050")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR086")
+					(reference "#PWR059")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 82.55 52.07 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ad5f941a-2667-458a-aa14-3837bcc9d90e")
+		(property "Reference" "#PWR052"
+			(at 82.55 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 82.55 46.99 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 82.55 52.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 82.55 52.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 82.55 52.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "9ee6826e-3044-4a25-a460-cc07d04b09b4")
+		)
+		(instances
+			(project "SCCS-RPI"
+				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
+					(reference "#PWR052")
+					(unit 1)
+				)
+				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
+					(reference "#PWR061")
 					(unit 1)
 				)
 			)
@@ -3529,7 +3760,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "c814c36f-dff9-4837-9df5-40d09be5e045")
-		(property "Reference" "#PWR083"
+		(property "Reference" "#PWR056"
 			(at 189.23 99.06 0)
 			(hide yes)
 			(show_name no)
@@ -3589,11 +3820,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR083")
+					(reference "#PWR056")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR091")
+					(reference "#PWR065")
 					(unit 1)
 				)
 			)
@@ -3601,7 +3832,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 66.04 67.31 0)
+		(at 59.69 67.31 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -3610,8 +3841,8 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "e562e0bc-8976-44c7-974b-1d66d505faf0")
-		(property "Reference" "#PWR080"
-			(at 66.04 73.66 0)
+		(property "Reference" "#PWR053"
+			(at 59.69 73.66 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3622,7 +3853,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 66.04 71.12 0)
+			(at 59.69 71.12 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -3632,7 +3863,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 66.04 67.31 0)
+			(at 59.69 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3643,7 +3874,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 66.04 67.31 0)
+			(at 59.69 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3654,7 +3885,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 66.04 67.31 0)
+			(at 59.69 67.31 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3670,11 +3901,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "#PWR080")
+					(reference "#PWR053")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "#PWR088")
+					(reference "#PWR062")
 					(unit 1)
 				)
 			)
@@ -3691,7 +3922,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "ebb8176d-eff9-4f4c-b795-8d0ed55b69eb")
-		(property "Reference" "C53"
+		(property "Reference" "C47"
 			(at 122.936 45.466 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3766,11 +3997,11 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/0e54ede7-c3c3-481e-ab9c-f158ab57a6d1"
-					(reference "C53")
+					(reference "C47")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/d3b05700-09f1-456c-b82f-4b1205485eff"
-					(reference "C57")
+					(reference "C51")
 					(unit 1)
 				)
 			)

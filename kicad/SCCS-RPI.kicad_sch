@@ -6738,6 +6738,145 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "power:+3V3"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "+3V3"
+				(at 0 3.556 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"+3V3\""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "+3V3_0_1"
+				(polyline
+					(pts
+						(xy -0.762 1.27) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "+3V3_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "power:+5V"
 			(power global)
 			(pin_numbers
@@ -7242,7 +7381,7 @@
 	)
 	(text "SCCS core hardware\nPresence detection\n(For future use)"
 		(exclude_from_sim no)
-		(at 388.112 90.17 0)
+		(at 380.746 94.996 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7306,9 +7445,9 @@
 		)
 		(uuid "2db78223-3054-4c26-bb12-82efada1b614")
 	)
-	(text "1.  Power circuit provides 5V\n\n2.  RPI Provides 3.3V\n\n3.  1-Wire Bus Notes:\n    Put a 220R resistor on the data pin of each temp sensor but ensure it's not\n    in series with the bus.\n    Put a 100nF ceramic cap across VCC and GND at each temp sensor.\n\n4.  WS281X RPI Notes:\n    PWM Channel 0 can be routed to GPIO 12 OR GPIO 18\n    PWM Channel 1 can be routed to GPIO 13 OR GPIO 19\n    Put a 220R in-line resister on data at each LED strip\n    Put a 1000uF electrolytic cap between 12V and GND on each data strip\n\n5.  UARTS:\n    UART1 / GPIO14/15 / Reserved for Bluetooth\n    UART2 / GPIO00/01 / GPS\n    UART3 / GPIO04/05 / ESP32 No. 1\n    UART4 / GPIO08/09 / ESP32 No. 2"
+	(text "1.  Power circuit provides 5V\n\n2.  RPI Provides 3.3V\n\n3.  1-Wire Bus Notes:\n    Put a 220R resistor on the data pin of each temp sensor but ensure it's not\n    in series with the bus.\n    Put a 100nF ceramic cap across VCC and GND at each temp sensor.\n\n4.  WS281X RPI Notes:\n    PWM Channel 0 can be routed to GPIO 12 OR GPIO 18\n    PWM Channel 1 can be routed to GPIO 13 OR GPIO 19\n    Put a 220R in-line resister on data at each LED strip\n    Put a 1000uF electrolytic cap between 12V and GND on each data strip\n\n5.  UARTS:\n    UART1 / GPIO14/15 / Reserved for Bluetooth\n    UART2 / GPIO00/01 / GPS\n    UART3 / GPIO04/05 / ESP32 No. 1\n    UART4 / GPIO08/09 / ESP32 No. 2\n\n6.  12V LED Strip Notes (not necessary but good practice):\n    Put a 220uF 25V electrolytic cap across 12V and GND at each LED strip.\n    Put a 100nF 25V ceramic cap across 12V and GND at each LED strip."
 		(exclude_from_sim no)
-		(at 377.19 361.95 0)
+		(at 377.19 351.79 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7464,7 +7603,7 @@
 	)
 	(text "Notes"
 		(exclude_from_sim no)
-		(at 376.936 356.87 0)
+		(at 376.936 346.71 0)
 		(effects
 			(font
 				(size 2.54 2.54)
@@ -8292,12 +8431,6 @@
 		(uuid "3774eb13-4d7a-4eb8-8be7-74596d063edc")
 	)
 	(junction
-		(at 337.82 44.45)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "37e944fe-c00e-4e5d-861b-5ec5f455e45f")
-	)
-	(junction
 		(at 186.69 379.73)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8418,6 +8551,12 @@
 		(uuid "79f75f4f-48da-4375-a514-d99ada509bfc")
 	)
 	(junction
+		(at 337.82 49.53)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7b7935f7-fdde-404b-a9e2-5b40d36dd757")
+	)
+	(junction
 		(at 364.49 44.45)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8502,12 +8641,6 @@
 		(uuid "ac50a51c-b423-49c9-9bb1-cb44018e470a")
 	)
 	(junction
-		(at 337.82 49.53)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ac92f5ec-0fbf-4edf-92e1-cbadf88ab798")
-	)
-	(junction
 		(at 173.99 379.73)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -8572,6 +8705,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "c8312e92-206d-4599-abda-0e6b94c59452")
+	)
+	(junction
+		(at 337.82 44.45)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d0353fee-b12e-4cab-a060-6ac736eac737")
 	)
 	(junction
 		(at 203.2 392.43)
@@ -8907,7 +9046,7 @@
 	)
 	(polyline
 		(pts
-			(xy 376.936 359.41) (xy 456.946 359.41)
+			(xy 376.936 349.25) (xy 456.946 349.25)
 		)
 		(stroke
 			(width 0)
@@ -9187,7 +9326,7 @@
 	)
 	(wire
 		(pts
-			(xy 337.82 44.45) (xy 344.17 44.45)
+			(xy 330.2 44.45) (xy 337.82 44.45)
 		)
 		(stroke
 			(width 0)
@@ -9727,16 +9866,6 @@
 	)
 	(wire
 		(pts
-			(xy 387.35 95.25) (xy 378.46 95.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "49f00631-d02f-4789-8d8f-18a3e1a67997")
-	)
-	(wire
-		(pts
 			(xy 309.88 82.55) (xy 344.17 82.55)
 		)
 		(stroke
@@ -9934,16 +10063,6 @@
 			(type default)
 		)
 		(uuid "567221c3-5949-4566-bcf7-6200ba3ab593")
-	)
-	(wire
-		(pts
-			(xy 330.2 49.53) (xy 337.82 49.53)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "56c19271-39fd-423a-8e25-dae2ae3940b5")
 	)
 	(wire
 		(pts
@@ -10164,6 +10283,16 @@
 			(type default)
 		)
 		(uuid "69811e2a-89e9-4d76-92d4-901ae3a3faab")
+	)
+	(wire
+		(pts
+			(xy 387.35 90.17) (xy 414.02 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "69ca17e6-7a6a-43dd-b471-cc6a35207945")
 	)
 	(wire
 		(pts
@@ -10554,6 +10683,16 @@
 			(type default)
 		)
 		(uuid "84bb5416-5fc4-4902-b1b4-95bbb6fa6cbc")
+	)
+	(wire
+		(pts
+			(xy 337.82 44.45) (xy 344.17 44.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8576e2d1-413a-4a53-acf6-34c0f77735a0")
 	)
 	(wire
 		(pts
@@ -11087,16 +11226,6 @@
 	)
 	(wire
 		(pts
-			(xy 330.2 44.45) (xy 337.82 44.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a925b168-ec4f-4820-a9de-26a207b92b1d")
-	)
-	(wire
-		(pts
 			(xy 477.52 85.09) (xy 478.79 85.09)
 		)
 		(stroke
@@ -11104,16 +11233,6 @@
 			(type default)
 		)
 		(uuid "aa5f660b-41e5-434d-be4d-839708474914")
-	)
-	(wire
-		(pts
-			(xy 387.35 90.17) (xy 387.35 95.25)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aad75cdf-1069-4e26-bce2-30d9cd3f7ce0")
 	)
 	(wire
 		(pts
@@ -11807,7 +11926,7 @@
 	)
 	(wire
 		(pts
-			(xy 337.82 49.53) (xy 344.17 49.53)
+			(xy 330.2 49.53) (xy 337.82 49.53)
 		)
 		(stroke
 			(width 0)
@@ -12244,6 +12363,16 @@
 			(type default)
 		)
 		(uuid "fab8890b-41bc-4402-b06c-5589819b9fdc")
+	)
+	(wire
+		(pts
+			(xy 337.82 49.53) (xy 344.17 49.53)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fcc8391f-6094-4a0b-901a-0b8e3921d7cc")
 	)
 	(wire
 		(pts
@@ -13096,192 +13225,6 @@
 		(uuid "f83a4898-40fc-4861-984a-f76edd17a28c")
 	)
 	(symbol
-		(lib_id "Device:C_Small")
-		(at 337.82 46.99 0)
-		(mirror x)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "02c6f8dc-36ed-4c64-bdd2-8f5edc2d00a0")
-		(property "Reference" "C3"
-			(at 338.074 48.514 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.016 1.016)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "47uF"
-			(at 338.074 45.466 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.016 1.016)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
-			(at 337.82 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 337.82 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 337.82 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC Part #" "C380345"
-			(at 337.82 46.99 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bf3bfa24-85c7-4364-be40-9e28387e4bfd")
-		)
-		(pin "2"
-			(uuid "75350b78-7f97-4f79-a44c-3f0cea08d164")
-		)
-		(instances
-			(project "SCCS-RPI"
-				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "C3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 73.66 387.35 0)
-		(mirror x)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0393753d-99cf-4fcb-9819-bdee1a462cd4")
-		(property "Reference" "C24"
-			(at 73.66 388.874 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.016 1.016)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100uF"
-			(at 73.66 385.826 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.016 1.016)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
-			(at 73.66 387.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 73.66 387.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Unpolarized capacitor, small symbol"
-			(at 73.66 387.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC Part #" "C141660"
-			(at 73.66 387.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "0c2bd965-bc1b-49b1-92b1-4f0fee47d4ef")
-		)
-		(pin "2"
-			(uuid "900cbe0e-43a3-4b9d-bd3a-475639289101")
-		)
-		(instances
-			(project "SCCS-RPI"
-				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "C24")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small")
 		(at 149.86 392.43 270)
 		(unit 1)
@@ -13474,7 +13417,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "0d556d55-3c2d-4530-9dbd-6410ed4ea9e1")
-		(property "Reference" "#PWR020"
+		(property "Reference" "#PWR021"
 			(at 252.73 396.24 0)
 			(hide yes)
 			(show_name no)
@@ -13534,7 +13477,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR020")
+					(reference "#PWR021")
 					(unit 1)
 				)
 			)
@@ -14364,7 +14307,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "2ca7c27d-acf7-40d8-8488-d9c055c1ee3d")
-		(property "Reference" "#PWR013"
+		(property "Reference" "#PWR014"
 			(at 78.74 285.75 0)
 			(hide yes)
 			(show_name no)
@@ -14424,7 +14367,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR013")
+					(reference "#PWR014")
 					(unit 1)
 				)
 			)
@@ -14442,7 +14385,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2de808f8-785e-4a26-9c54-541bc0284c1e")
-		(property "Reference" "#PWR010"
+		(property "Reference" "#PWR011"
 			(at 541.02 200.66 0)
 			(hide yes)
 			(show_name no)
@@ -14502,7 +14445,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR010")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -14689,7 +14632,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "3322184d-563b-40dd-ab11-33a545dcf83c")
-		(property "Reference" "#PWR022"
+		(property "Reference" "#PWR023"
 			(at 123.19 398.78 0)
 			(hide yes)
 			(show_name no)
@@ -14749,7 +14692,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR022")
+					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -14858,7 +14801,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "3d1c4bbb-20cd-436b-9306-f8a001af9b9d")
-		(property "Reference" "#PWR016"
+		(property "Reference" "#PWR017"
 			(at 232.41 369.57 0)
 			(hide yes)
 			(show_name no)
@@ -14918,7 +14861,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR016")
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -15402,7 +15345,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "57191450-ee27-412c-adcf-9777015218d5")
-		(property "Reference" "#PWR021"
+		(property "Reference" "#PWR022"
 			(at 41.91 397.51 0)
 			(hide yes)
 			(show_name no)
@@ -15462,7 +15405,85 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR021")
+					(reference "#PWR022")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 414.02 90.17 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "572c8fe9-fcbc-4605-ab60-ff99b6571daf")
+		(property "Reference" "#PWR07"
+			(at 414.02 93.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 414.02 85.09 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 414.02 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 414.02 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 414.02 90.17 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4c1595ba-edc0-4b53-ba07-474a48cc03b9")
+		)
+		(instances
+			(project "SCCS-RPI"
+				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
+					(reference "#PWR07")
 					(unit 1)
 				)
 			)
@@ -16463,7 +16484,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "87e6849a-5389-450d-9fed-ba0e6c09f0c2")
-		(property "Reference" "#PWR09"
+		(property "Reference" "#PWR010"
 			(at 508 157.48 0)
 			(hide yes)
 			(show_name no)
@@ -16523,7 +16544,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR09")
+					(reference "#PWR010")
 					(unit 1)
 				)
 			)
@@ -17103,7 +17124,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "98081f48-2ce4-4405-b390-08d911c5a42a")
-		(property "Reference" "#PWR011"
+		(property "Reference" "#PWR012"
 			(at 73.66 276.86 0)
 			(hide yes)
 			(show_name no)
@@ -17163,7 +17184,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR011")
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -17368,7 +17389,7 @@
 				)
 			)
 		)
-		(property "LCSC Part #" "C17342103"
+		(property "LCSC Part #" "C541516"
 			(at 149.86 384.81 90)
 			(hide yes)
 			(show_name no)
@@ -17793,7 +17814,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a08628e1-4c8d-4389-933b-49ef1459b1eb")
-		(property "Reference" "#PWR07"
+		(property "Reference" "#PWR08"
 			(at 378.46 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -17853,7 +17874,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR07")
+					(reference "#PWR08")
 					(unit 1)
 				)
 			)
@@ -18065,6 +18086,99 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 337.82 46.99 0)
+		(mirror x)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a493f232-ec5b-4b61-8de1-a9c9af7eddaf")
+		(property "Reference" "C3"
+			(at 337.82 48.514 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "22uF"
+			(at 337.82 45.466 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric"
+			(at 337.82 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 337.82 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Unpolarized capacitor, small symbol"
+			(at 337.82 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C86816"
+			(at 337.82 46.99 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c4f7e448-775c-4f65-ae6b-014ceb8cd355")
+		)
+		(pin "2"
+			(uuid "e7b0c87a-466a-4dde-a93d-345fcd136e51")
+		)
+		(instances
+			(project "SCCS-RPI"
+				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
+					(reference "C3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:PWR_FLAG")
 		(at 162.56 374.65 0)
 		(unit 1)
@@ -18243,7 +18357,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "a9cf2f19-2f8a-4520-8188-62c2ad89781e")
-		(property "Reference" "#PWR014"
+		(property "Reference" "#PWR015"
 			(at 62.23 340.36 0)
 			(hide yes)
 			(show_name no)
@@ -18303,7 +18417,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR014")
+					(reference "#PWR015")
 					(unit 1)
 				)
 			)
@@ -18507,7 +18621,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "b2fd6665-8b96-4ed4-8b51-417e7e5711ed")
-		(property "Reference" "#PWR012"
+		(property "Reference" "#PWR013"
 			(at 53.34 285.75 0)
 			(hide yes)
 			(show_name no)
@@ -18567,7 +18681,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR012")
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -18676,7 +18790,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b4a10847-0fb5-4096-877c-860d43821c8e")
-		(property "Reference" "#PWR019"
+		(property "Reference" "#PWR020"
 			(at 232.41 387.35 0)
 			(hide yes)
 			(show_name no)
@@ -18736,7 +18850,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR019")
+					(reference "#PWR020")
 					(unit 1)
 				)
 			)
@@ -19001,6 +19115,99 @@
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
 					(reference "C1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Polarized_Small")
+		(at 73.66 387.35 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "bdcd4137-221d-4e38-914a-3f6158c70775")
+		(property "Reference" "C24"
+			(at 73.406 388.874 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100uF"
+			(at 73.406 385.826 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm"
+			(at 73.66 387.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 73.66 387.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" "Polarized capacitor, small symbol"
+			(at 73.66 387.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "LCSC Part #" "C44587"
+			(at 73.66 387.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2b5192bf-e61b-4502-9258-4645f13c1abd")
+		)
+		(pin "2"
+			(uuid "9c98e137-672f-4376-8941-bcebf7209c64")
+		)
+		(instances
+			(project "SCCS-RPI"
+				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
+					(reference "C24")
 					(unit 1)
 				)
 			)
@@ -19389,7 +19596,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "d3d33c7f-b368-499c-a45f-7e68ab72c64d")
-		(property "Reference" "#PWR015"
+		(property "Reference" "#PWR016"
 			(at 93.98 341.63 0)
 			(hide yes)
 			(show_name no)
@@ -19449,7 +19656,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR015")
+					(reference "#PWR016")
 					(unit 1)
 				)
 			)
@@ -19920,7 +20127,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Coaxial:U.FL_Hirose_U.FL-R-SMT-1_Vertical"
+		(property "Footprint" "Connector_Coaxial:SMA_Amphenol_132134-11_Vertical"
 			(at 93.98 308.61 0)
 			(hide yes)
 			(show_name no)
@@ -19953,7 +20160,7 @@
 				)
 			)
 		)
-		(property "LCSC Part #" "C88373"
+		(property "LCSC Part #" "C20415804"
 			(at 93.98 308.61 0)
 			(hide yes)
 			(show_name no)
@@ -20080,7 +20287,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "ed1df07a-c76e-4e72-a2e1-2246da8348ed")
-		(property "Reference" "#PWR017"
+		(property "Reference" "#PWR018"
 			(at 252.73 378.46 0)
 			(hide yes)
 			(show_name no)
@@ -20140,7 +20347,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR017")
+					(reference "#PWR018")
 					(unit 1)
 				)
 			)
@@ -20273,7 +20480,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ee5e2242-2d6d-4c3d-b17c-7e00c772ec29")
-		(property "Reference" "#PWR08"
+		(property "Reference" "#PWR09"
 			(at 508 120.65 0)
 			(hide yes)
 			(show_name no)
@@ -20333,7 +20540,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR08")
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -20350,7 +20557,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "f496f4f8-9225-4ec4-aa1a-ca2a274fa582")
-		(property "Reference" "#PWR018"
+		(property "Reference" "#PWR019"
 			(at 199.39 378.46 0)
 			(hide yes)
 			(show_name no)
@@ -20410,7 +20617,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR018")
+					(reference "#PWR019")
 					(unit 1)
 				)
 			)
@@ -20427,7 +20634,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "f59dbf21-b859-4d7c-9155-60160f02a9b4")
-		(property "Reference" "#PWR023"
+		(property "Reference" "#PWR024"
 			(at 203.2 401.32 0)
 			(hide yes)
 			(show_name no)
@@ -20487,7 +20694,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb"
-					(reference "#PWR023")
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)

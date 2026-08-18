@@ -957,16 +957,6 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 69.85) (xy 100.33 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1a22a8f3-8f9b-4f29-9f41-69d458421651")
-	)
-	(wire
-		(pts
 			(xy 99.06 66.04) (xy 106.68 66.04)
 		)
 		(stroke
@@ -1034,6 +1024,16 @@
 			(type default)
 		)
 		(uuid "c386bfa2-0e45-4eb2-ae23-e5a2b74aee8a")
+	)
+	(wire
+		(pts
+			(xy 87.63 69.85) (xy 100.33 69.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e253cc99-f462-4314-b0d2-ccef6e993f57")
 	)
 	(wire
 		(pts
@@ -1178,104 +1178,6 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 91.44 69.85 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3ee9f4af-85be-43f7-9ce4-5ae38c890181")
-		(property "Reference" "R18"
-			(at 91.44 67.564 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "470R"
-			(at 91.44 69.85 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 0.762 0.762)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0805_2012Metric"
-			(at 91.44 71.628 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 91.44 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 91.44 69.85 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC Part #" "C17710"
-			(at 91.44 69.85 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "42073c05-a9da-4bd7-89e5-a5af5ef06922")
-		)
-		(pin "1"
-			(uuid "c7a16297-6d7e-4ca0-9a1b-a81a62a3bb56")
-		)
-		(instances
-			(project "SCCS-RPI"
-				(path "/ce21946f-7655-4864-b48a-50deff8538eb/11e9aa4c-c1a1-4a8f-a0a0-7141df7ab674"
-					(reference "R20")
-					(unit 1)
-				)
-				(path "/ce21946f-7655-4864-b48a-50deff8538eb/3114b48f-2d53-4033-bb6c-4b7d97201800"
-					(reference "R18")
-					(unit 1)
-				)
-				(path "/ce21946f-7655-4864-b48a-50deff8538eb/f275b187-1ecf-4da8-9601-a32837f11b2b"
-					(reference "R22")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
 		(at 110.49 66.04 270)
 		(mirror x)
 		(unit 1)
@@ -1359,7 +1261,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/11e9aa4c-c1a1-4a8f-a0a0-7141df7ab674"
-					(reference "R19")
+					(reference "R18")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/3114b48f-2d53-4033-bb6c-4b7d97201800"
@@ -1367,7 +1269,7 @@
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/f275b187-1ecf-4da8-9601-a32837f11b2b"
-					(reference "R21")
+					(reference "R19")
 					(unit 1)
 				)
 			)
@@ -1385,7 +1287,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "46edee55-97f4-4907-9a35-bdc367969bbc")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR028"
 			(at 99.06 85.09 0)
 			(hide yes)
 			(show_name no)
@@ -1445,15 +1347,15 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/11e9aa4c-c1a1-4a8f-a0a0-7141df7ab674"
-					(reference "#PWR029")
+					(reference "#PWR030")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/3114b48f-2d53-4033-bb6c-4b7d97201800"
-					(reference "#PWR027")
+					(reference "#PWR028")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/f275b187-1ecf-4da8-9601-a32837f11b2b"
-					(reference "#PWR031")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -1671,7 +1573,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "ddec02a3-b393-4f2c-989c-8b7a62e62491")
-		(property "Reference" "#PWR026"
+		(property "Reference" "#PWR027"
 			(at 99.06 66.04 0)
 			(hide yes)
 			(show_name no)
@@ -1731,15 +1633,15 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/11e9aa4c-c1a1-4a8f-a0a0-7141df7ab674"
-					(reference "#PWR028")
+					(reference "#PWR029")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/3114b48f-2d53-4033-bb6c-4b7d97201800"
-					(reference "#PWR026")
+					(reference "#PWR027")
 					(unit 1)
 				)
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/f275b187-1ecf-4da8-9601-a32837f11b2b"
-					(reference "#PWR030")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)

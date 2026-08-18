@@ -1388,7 +1388,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "032c2a13-9f48-4546-aee0-fd301cc5f4bb")
-		(property "Reference" "#PWR025"
+		(property "Reference" "#PWR026"
 			(at 125.73 82.55 0)
 			(hide yes)
 			(show_name no)
@@ -1448,7 +1448,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/bb66c69c-6e92-45e3-af26-54c25f3bdd7c"
-					(reference "#PWR025")
+					(reference "#PWR026")
 					(unit 1)
 				)
 			)
@@ -1557,7 +1557,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "604dc0ab-399f-4e8f-8c01-965cee996b98")
-		(property "Reference" "#PWR024"
+		(property "Reference" "#PWR025"
 			(at 113.03 63.5 0)
 			(hide yes)
 			(show_name no)
@@ -1617,7 +1617,7 @@
 		(instances
 			(project "SCCS-RPI"
 				(path "/ce21946f-7655-4864-b48a-50deff8538eb/bb66c69c-6e92-45e3-af26-54c25f3bdd7c"
-					(reference "#PWR024")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
