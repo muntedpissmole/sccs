@@ -35,6 +35,37 @@ class ReedInput:
             n: gpio_manager.reed_states.get(n, True) for n in reed_names
         }
 
+    def prime(self, interval_s: float = 0.05) -> Dict[str, bool]:
+        """Blocking stable sample. Call before the first lighting pass."""
+        needed = self._stable_polls
+        counts: Dict[str, int] = {n: 0 for n in self._reed_names}
+        last: Dict[str, Optional[bool]] = {n: None for n in self._reed_names}
+        attempts = max(needed, needed * 4)
+        for _ in range(attempts):
+            settled = True
+            for name in self._reed_names:
+                button = self._gpio.reeds.get(name)
+                if button is None:
+                    counts[name] = needed
+                    continue
+                current = bool(button.is_pressed)
+                self._gpio.reed_states[name] = current
+                if last[name] == current:
+                    counts[name] += 1
+                else:
+                    last[name] = current
+                    counts[name] = 1
+                if counts[name] < needed:
+                    settled = False
+            if settled:
+                break
+            time.sleep(max(0.01, interval_s))
+        for name in self._reed_names:
+            if last[name] is not None:
+                self._stable[name] = last[name]
+                self._gpio.reed_states[name] = last[name]
+        return dict(self._stable)
+
     def start(self):
         if self._running:
             return

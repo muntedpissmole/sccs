@@ -101,6 +101,7 @@ phase_ramp_time_ms = 4000
 #
 # [lights] pin fields use ESP pin IDs (e.g. 1-4 or 1-13|1-12|1-11 for rgb_bug)
 # Configured lights use ESP pin IDs below.
+# Boot: dtoverlay=uart3,uart4 under [pi4], or uart2-pi5,uart3-pi5 under [pi5].
 serial_ports = /dev/ttyAMA2, /dev/ttyAMA3
 
 # Baud rate for ESP32 serial protocol
@@ -157,15 +158,22 @@ floodlights         = Floodlights       | 22 | true  | false | fa-lightbulb     
 # fridge_oven       = Fridge + Oven     |  6 | true  | false | fa-kitchen-set   | 23
 
 [reeds]
-# Reed inputs on the SCCS PCB (external pull-up; reed closes to GND = active low):
-#   Reed 1 → GPIO 23
-#   Reed 2 → GPIO 24
-#   Reed 3 → GPIO 25
-#   Reed 4 → GPIO 7
-#   Reed 5 → GPIO 12
-#   Reed 6 → GPIO 16
-#   Reed 7 → GPIO 20
-#   Reed 8 → GPIO 21
+# Reed inputs on the SCCS PCB (external pull-up; reed closes to GND = active low).
+# Matches kicad/SCCS-RPI.kicad_sch i1 ("Reed Switches") and Reed Switch 1–8:
+#
+#   Reed  i1 pins  Function         GPIO
+#   1     1 / 2    Kitchen Bench      23
+#   2     3 / 4    Kitchen Panel      24
+#   3     5 / 6    Storage Panel      25
+#   4     7 / 8    Rear Drawer         7
+#   5     9 / 10   Rooftop Tent       12
+#   6    11 / 12   Spare              16
+#   7    13 / 14   Spare              20
+#   8    15 / 16   Spare              21
+#
+# i1 pin 5 is Storage Panel (Reed 3), not Reed 5. Reed 5 is pins 9/10.
+# Pin 16 sits next to the 12V inlet; pin 1 is the opposite end of i1.
+# Unconnected channels read open. Only a short on that pair should close it.
 #
 # Format: internal_name = Friendly Name | pin | pull_up | bounce_time | icon | order | controls:light1,light2,...
 # - pull_up: true = Pi internal pull-up; false = external pull-up only (disable internal)
@@ -175,8 +183,8 @@ floodlights         = Floodlights       | 22 | true  | false | fa-lightbulb     
 #
 # Named functions mapped to reed channels 1–5 below; 6–8 reserved.
 
-kitchen_panel     = Kitchen Panel     | 23 | false | 0.05 | fa-utensils      | 10 | kitchen_panel
-kitchen_bench     = Kitchen Bench     | 24 | false | 0.05 | fa-mug-hot       | 11 |
+kitchen_bench     = Kitchen Bench     | 23 | false | 0.05 | fa-mug-hot       | 11 |
+kitchen_panel     = Kitchen Panel     | 24 | false | 0.05 | fa-utensils      | 10 | kitchen_panel
 storage_panel     = Storage Panel     | 25 | false | 0.05 | fa-boxes-stacked | 12 |
 rear_drawer       = Rear Drawer       |  7 | false | 0.05 | fa-archive       | 13 |
 rooftop_tent      = Rooftop Tent      | 12 | false | 0.05 | fa-tent          | 14 |
@@ -409,8 +417,8 @@ rooftop_tent    = 1
 ensuite         = 10
 
 
-[scenes.ensuite]
-name        = Ensuite
+[scenes.bathroom]
+name        = Bathroom
 icon        = fa-bath
 order       = 2
 description = Use the bathroom in the middle of the night
@@ -463,8 +471,9 @@ all_off = true
 
 [gps]
 # Serial ports tried (in order) for the GPS module.
-# Module: u-blox NEO-M9N-00B on UART2 (GPIO 0 TX / GPIO 1 RX).
-# Boot: dtoverlay=uart2 under [pi4]. Device node is typically /dev/ttyAMA1.
+# Module: u-blox NEO-M9N-00B on GPIO 0 TX / GPIO 1 RX.
+# Boot: dtoverlay=uart2 under [pi4], or dtoverlay=uart1-pi5 under [pi5].
+# Device node is typically /dev/ttyAMA1 on both.
 # GPIO 14/15 are reserved for onboard Bluetooth — do not use /dev/serial0 here.
 serial_ports = /dev/ttyAMA1
 

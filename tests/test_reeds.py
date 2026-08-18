@@ -52,6 +52,12 @@ class TestReedDebounce(unittest.TestCase):
         accepted = self._sample(False, 1.7)
         self.assertFalse(accepted)
 
+    def test_prime_takes_stable_open_before_loop_starts(self):
+        states = self.reed_input.prime(interval_s=0.0)
+        self.assertEqual(states["rooftop_tent"], False)
+        self.assertEqual(self.reed_input._stable["rooftop_tent"], False)
+        self.assertFalse(self.gpio.reed_states["rooftop_tent"])
+
 
 if __name__ == "__main__":
     unittest.main()

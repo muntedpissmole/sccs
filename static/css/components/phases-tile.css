@@ -29,6 +29,11 @@
     margin-bottom: 0;
 }
 
+/* Author display:flex above beats the UA [hidden] rule — keep hide working. */
+#system .system-pack-col > .tile[hidden] {
+    display: none !important;
+}
+
 #tile-phases {
     display: flex;
     flex-direction: column;

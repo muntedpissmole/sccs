@@ -8,6 +8,12 @@
     min-width: 0;
 }
 
+/* Author display:flex above beats the UA [hidden] rule — keep hide working. */
+#tile-homekit-system[hidden],
+#tile-matter-system[hidden] {
+    display: none !important;
+}
+
 .homekit-system-tile__body {
     position: relative;
     z-index: 3;

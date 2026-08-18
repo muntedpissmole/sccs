@@ -871,12 +871,12 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(out.lights["rooftop_tent"][0], 1)
         self.assertEqual(out.lights["ensuite"][0], 10)
 
-    def test_real_config_ensuite_scene(self):
+    def test_real_config_bathroom_scene(self):
         cfg = real_cfg()
         world = WorldState(
             reeds={name: False for name in cfg.reed_names},
             phase="Evening",
-            active_scene="ensuite",
+            active_scene="bathroom",
         )
         out = desired_outputs(world, cfg)
         self.assertEqual(out.lights["ensuite"][0], 10)

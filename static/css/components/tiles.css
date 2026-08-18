@@ -182,6 +182,13 @@
     display: none !important;
 }
 
+/* Settings tiles (HomeKit / Google Home) use [hidden] when that integration
+   is off. Author display:flex on .tile and #system .system-pack-col > .tile
+   beats the UA [hidden] { display: none } rule in WebKit. */
+#system .tile[hidden] {
+    display: none !important;
+}
+
 /*
  * When any hardware tile is hidden, drop the fixed 6-col placements so the
  * remaining tiles pack instead of leaving empty cells in the designed layout.

@@ -1135,6 +1135,13 @@ if __name__ == "__main__":
         # Bind HTTP immediately so nginx (port 80 → 5000) never returns 502 while
         # systemd already marks the unit active. NTP wait and hardware init can take
         # tens of seconds (up to clock_sync_timeout_s) and used to block the listen.
+        # Sample reeds first (~150ms) so a connecting UI does not see the
+        # all-closed world default, and lighting never applies before GPIO.
+        try:
+            runtime.prime_reeds()
+        except Exception:
+            logger.exception("Reed prime failed — lighting will wait for startup")
+
         def _run_startup():
             try:
                 _startup()

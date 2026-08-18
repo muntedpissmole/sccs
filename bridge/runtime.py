@@ -60,6 +60,7 @@ class SCCSRuntime:
         self.sensor_manager = None
         self._shutdown = threading.Event()
         self._reconcile_lock = threading.Lock()
+        self._gpio_ready = False
         self._state_listeners: list = []
         self._reed_listeners: list = []
 
@@ -402,13 +403,33 @@ class SCCSRuntime:
         snap = self.world.snapshot()
         return {"states": dict(snap.reeds), "forced": dict(snap.reed_forces)}
 
-    def start_hardware(self):
-        """Init serial/GPIO and load reed state. No reconcile yet — phase comes first."""
-        self.esp32.init_serial()
-        self.gpio.init_devices()
+    def _ensure_reed_input(self) -> ReedInput:
+        if self.reed_input is None:
+            self.reed_input = ReedInput(
+                gpio_manager=self.gpio,
+                reed_names=self.compiled.reed_names,
+                debounce_ms=self.compiled.reed_debounce_ms,
+                stable_polls=self.compiled.reed_stable_polls,
+                on_update=self.on_reeds_updated,
+            )
+        return self.reed_input
 
-        initial_reeds = {n: self.gpio.reed_states.get(n, True) for n in self.compiled.reed_names}
-        self.world.update_reeds(initial_reeds)
+    def prime_reeds(self) -> dict:
+        """GPIO + stable reed sample into the world. No lighting. Safe to call twice."""
+        if not self._gpio_ready:
+            self.gpio.init_devices()
+            self._gpio_ready = True
+        states = self._ensure_reed_input().prime()
+        self.world.update_reeds(states)
+        closed = sum(1 for v in states.values() if v)
+        opened = len(states) - closed
+        logger.info(f"🚪 Reeds primed — {opened} open / {closed} closed")
+        return states
+
+    def start_hardware(self):
+        """GPIO/reeds first, then ESP serial. No reconcile yet — phase comes first."""
+        self.prime_reeds()
+        self.esp32.init_serial()
         self.reconciler.read_hardware()
 
     def bootstrap_phase(self):
@@ -424,14 +445,8 @@ class SCCSRuntime:
 
     def finish_startup(self):
         """Start reed polling and run the first reconcile (phase must already be set)."""
-        self.reed_input = ReedInput(
-            gpio_manager=self.gpio,
-            reed_names=self.compiled.reed_names,
-            debounce_ms=self.compiled.reed_debounce_ms,
-            stable_polls=self.compiled.reed_stable_polls,
-            on_update=self.on_reeds_updated,
-        )
-        self.reed_input.start()
+        self.prime_reeds()
+        self._ensure_reed_input().start()
         self.reconcile(ramp_source="startup")
 
     def start_background_threads(self):

@@ -174,6 +174,15 @@ class GPSModule:
         if state["hardware_missing"]:
             # Surface configured fallback location so the Settings tile can show it.
             state.update(self._fallback_location_fields())
+        elif not self._valid_position(state.get("latitude"), state.get("longitude")):
+            # Receiver is up but has no fix (empty GGA/RMC → 0,0). Use last
+            # known good coords if we have them, otherwise Alexandra fallback.
+            if self._valid_position(self.last_known_lat, self.last_known_lon):
+                state["latitude"] = self.last_known_lat
+                state["longitude"] = self.last_known_lon
+                state["using_fallback"] = True
+            else:
+                state.update(self._fallback_location_fields())
         if state.get("force_no_fix"):
             state.update({
                 "fix_quality": 0,
@@ -186,12 +195,31 @@ class GPSModule:
             })
         return state
 
+    @staticmethod
+    def _valid_position(lat, lon) -> bool:
+        """True for a real WGS84 pair. Empty NMEA becomes 0,0 (null island)."""
+        if lat is None or lon is None:
+            return False
+        try:
+            lat_f = float(lat)
+            lon_f = float(lon)
+        except (TypeError, ValueError):
+            return False
+        if not math.isfinite(lat_f) or not math.isfinite(lon_f):
+            return False
+        if abs(lat_f) > 90 or abs(lon_f) > 180:
+            return False
+        # pynmea2 reports 0.0/0.0 when lat/lon fields are blank (no fix).
+        if lat_f == 0.0 and lon_f == 0.0:
+            return False
+        return True
+
     def _parse_lat_lon(self, msg) -> Tuple[Optional[float], Optional[float]]:
         """Return signed decimal degrees from pynmea2 LatLonFix properties."""
         try:
             lat = getattr(msg, "latitude", None)
             lon = getattr(msg, "longitude", None)
-            if lat is None or lon is None:
+            if not self._valid_position(lat, lon):
                 return None, None
             return round(float(lat), 6), round(float(lon), 6)
         except Exception:
@@ -341,7 +369,7 @@ class GPSModule:
                         telemetry_updated = True
 
                     lat, lon = self._parse_lat_lon(msg)
-                    if lat is not None:
+                    if new_quality >= 1 and lat is not None:
                         self.state["latitude"] = lat
                         self.state["longitude"] = lon
                         position_updated = True
@@ -364,13 +392,21 @@ class GPSModule:
 
                 if isinstance(msg, pynmea2.RMC):
                     lat, lon = self._parse_lat_lon(msg)
-                    if lat is not None:
+                    rmc_ok = str(getattr(msg, "status", "") or "").upper() == "A"
+                    if rmc_ok and lat is not None:
                         self.state["latitude"] = lat
                         self.state["longitude"] = lon
                         position_updated = True
 
-                    if getattr(msg, 'datetime', None):
-                        utc_dt = msg.datetime.replace(tzinfo=zoneinfo.ZoneInfo("UTC"))
+                    # pynmea2.RMC.datetime raises TypeError when datestamp is
+                    # missing (normal no-fix sentences like $GNRMC,,V,...).
+                    utc_raw = None
+                    try:
+                        utc_raw = msg.datetime
+                    except (TypeError, ValueError):
+                        utc_raw = None
+                    if utc_raw:
+                        utc_dt = utc_raw.replace(tzinfo=zoneinfo.ZoneInfo("UTC"))
                         self.state["utc_time"] = utc_dt.isoformat()
                         try:
                             local_tz = zoneinfo.ZoneInfo(self.state["timezone"])
@@ -381,8 +417,12 @@ class GPSModule:
                             self.state["local_time"] = utc_dt.strftime("%H:%M:%S UTC")
                             self.state["date"] = utc_dt.strftime("%Y-%m-%d")
 
-                    if getattr(msg, 'spd_over_grnd', None) is not None:
-                        self.state["speed_kmh"] = round(float(msg.spd_over_grnd) * 1.852, 1)
+                    spd = getattr(msg, 'spd_over_grnd', None)
+                    if spd not in (None, ""):
+                        try:
+                            self.state["speed_kmh"] = round(float(spd) * 1.852, 1)
+                        except (TypeError, ValueError):
+                            pass
 
                 current_quality = self.state.get("fix_quality", 0)
                 

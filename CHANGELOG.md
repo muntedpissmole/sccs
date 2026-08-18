@@ -2,6 +2,18 @@
 
 All notable changes to SCCS are documented in this file.
 
+## [1.1.1.18082026] - 2026-08-18
+
+### Fixed
+- Startup treated every reed as closed until the poller started, so the first lighting pass and a connecting UI could show “all panels closed”. Reeds are now sampled (three quick GPIO reads) before HTTP is advertised and before any lights or scenes run
+- No-fix GPS sentences were stored as 0°N 0°E. Weather then fetched the equator (~24 °C). Empty GGA/RMC is ignored; with no valid fix the Alexandra fallback is used
+- pynmea2 raised on void RMC datetime (`$GNRMC,,V,…`); those sentences no longer crash the GPS reader
+- Settings tiles with `[hidden]` still painted in WebKit because author `display:flex` beat the UA rule
+
+### Changed
+- `[reeds]` comments map i1 pin pairs to functions; kitchen bench is GPIO23 and kitchen panel GPIO24
+- Night bathroom scene renamed from `ensuite` to `bathroom`
+
 ## [1.1.17082026] - 2026-08-17
 
 ### Fixed

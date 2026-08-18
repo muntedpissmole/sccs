@@ -72,12 +72,26 @@ def set_gps_module(gps_module) -> None:
     _gps_module = gps_module
 
 
+def _valid_coords(lat, lng) -> bool:
+    try:
+        lat_f = float(lat)
+        lng_f = float(lng)
+    except (TypeError, ValueError):
+        return False
+    if abs(lat_f) > 90 or abs(lng_f) > 180:
+        return False
+    # 0,0 is empty NMEA / null island — never a real SCCS position.
+    if lat_f == 0.0 and lng_f == 0.0:
+        return False
+    return True
+
+
 def _coords() -> tuple[float, float]:
     if _gps_module is not None:
         state = _gps_module.get_state()
         lat = state.get("latitude")
         lng = state.get("longitude")
-        if lat is not None and lng is not None:
+        if _valid_coords(lat, lng):
             return float(lat), float(lng)
     return _DEFAULT_LAT, _DEFAULT_LNG
 
